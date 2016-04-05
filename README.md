@@ -1,8 +1,11 @@
 # HackPSU-16
 Project for hackathon at PennState 2016
+
+This project should be easily extensible to multiple natural and programming languages, and will be structured to support that
+
 Below is the project outline
 
-project name
+## PROJECT NAME
 
 	start - initialize speech recognizer, focus subl window
 
@@ -31,5 +34,6 @@ parse(data)
 
 execute(command_sequence)
 
-	use sublime text api
-
+	read in config file, use appropriate settings
+	
+	apply settings using sublime text api, and insert necessary text
