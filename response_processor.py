@@ -17,14 +17,16 @@ class ResponseProcessor():
 			statement = "if-statement"
 		elif self.isCreateWhileLoop():
 			statement = "while-loop"
+		elif self.isOpenUrl():
+			statement = "open-url" 
 		elif self.isCreateForLoop():
 			statement = "for-loop"
 		elif self.isGoToNext():
 			statement = "goToNext"
-		# elif isCopyCurrentLine():
+		# elif isCopyCurrentLine():No matching voice command found
 		# 	statement = "copyCurrentLine"
 		# elif insertBelowLine():
-			statement = "insertBelowLine"
+			 # statement = "insertBelowLine"
 		else:
 			statement = "error"
 		return statement;
@@ -39,6 +41,7 @@ class ResponseProcessor():
 			return True;
 		else:
 			return False;
+
 	def isCreateNamedConstructor(self):
 		dictionary = ["insert", "define", "create", "add", "constructor", "named", "called"]
 		count = 0
@@ -119,3 +122,14 @@ class ResponseProcessor():
 			return True;
 		else:
 			return False;
+
+	def isOpenUrl(self):
+		dictionary = ["search", "for", "google"]
+		count = 0
+		for w in dictionary:
+			if w in self.response:
+				count+=1
+		if count >= 1:
+			return True
+		else:
+			return False

@@ -1,15 +1,19 @@
 import sublime, sublime_plugin, os
 from os.path import basename, splitext
+import urllib, json, subprocess
 
 class SmartInsertCommand(sublime_plugin.TextCommand):
 	statement = ""
 	globVoiceCommand = ""
+	response = ""
 
-	def run(self, edit, voiceCommand):
+	def run(self, edit, voiceCommand, rresponse):
 		global globVoiceCommand
 		global statement
+		global response
 
 		globVoiceCommand = voiceCommand
+		response = rresponse
 		statement = self.getInsertStatement()
 		originalCursorPosition = self.view.sel()[0].end()
 		
@@ -24,6 +28,10 @@ class SmartInsertCommand(sublime_plugin.TextCommand):
 			statement = "\n\nwhile ()\n{\n\n}"
 		elif (globVoiceCommand == "class"):
 			statement = "public class "+ self.formatFileName(self.view.file_name()) + " \n{\n\n}"
+		elif (globVoiceCommand == "open-url"):
+			arg = ''.join(map(str, response.split()[2:]))
+			self.openBrowser(arg)
+			statement = ""
 		else:
 			statement = "No matching voice command found"
 		return statement
@@ -50,3 +58,12 @@ class SmartInsertCommand(sublime_plugin.TextCommand):
 	def formatFileName(self, fileName):
 		formattedFileName = basename(fileName)
 		return os.path.splitext(formattedFileName)[0]
+
+	def openBrowser(self, query):
+		query = urllib.urlencode ( { 'q' : query } )
+		response = urllib.urlopen ( 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=3&' + query ).read().decode('unicode-escape')
+		resp_json = json.loads ( response, strict=False)
+		results = resp_json['responseData']['results']
+		for result in results:
+			url = result['url']
+			subprocess.Popen(['xdg-open', url])

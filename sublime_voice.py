@@ -8,9 +8,9 @@ audio_filename='output.wav'
 
 class VoiceCommand(sublime_plugin.TextCommand):
 	def record(self, edit):
-		bashCommand="arecord -c 1 -r 44100 -N -d 2 output.wav"
+		bashCommand="arecord -c 1 -r 44100 -N -d 3 output.wav"
 		process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-		time.sleep(2)
+		time.sleep(3)
 
 		self.send_to_google()
 
@@ -52,7 +52,7 @@ class VoiceCommand(sublime_plugin.TextCommand):
 
 		processor = ResponseProcessor(res)
 		processedResponse = processor.processResponse()
-		self.view.run_command("smart_insert", {"voiceCommand" : processedResponse})
+		self.view.run_command("smart_insert", {"voiceCommand" : processedResponse, "rresponse" : res})
 		
 	def run(self, edit):
 		thread = threading.Thread(name='record', target=self.record, kwargs={'edit':edit})
