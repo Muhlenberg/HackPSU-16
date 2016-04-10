@@ -5,14 +5,10 @@ class ResponseProcessor():
 	def processResponse(self):
 		if self.isCreateClass():
 			statement = "class"
-		elif self.isCreateNamedConstructor():
-			statement = "named-constructor"
-		elif self.isCreateUnamedConstructor():
-			statement = "unamed-constructor"
-		elif self.isCreateNamedMethod():
-			statement = "named-method"
-		elif self.isCreatedUnamedMethod():
-			statement = "unamed-method"
+		elif self.isCreateConstructor():
+			statement = "constructor"
+		elif self.isCreateMethod():
+			statement = "method"
 		elif self.isCreateIfStatement():
 			statement = "if-statement"
 		elif self.isCreateWhileLoop():
@@ -21,15 +17,15 @@ class ResponseProcessor():
 			statement = "open-url" 
 		elif self.isCreateForLoop():
 			statement = "for-loop"
-		elif self.isGoToNext():
-			statement = "goToNext"
+		# elif self.isGoToNext():
+		# 	statement = "goToNext"
 		# elif isCopyCurrentLine():No matching voice command found
 		# 	statement = "copyCurrentLine"
 		# elif insertBelowLine():
 			 # statement = "insertBelowLine"
 		else:
 			statement = "error"
-		return statement;
+		return statement
 
 	def isCreateClass(self):
 		dictionary = ["define", "create", "class", "add", "default"]
@@ -38,50 +34,30 @@ class ResponseProcessor():
 			if w in self.response:
 				count+=1
 		if count >= 2:
-			return True;
+			return True
 		else:
-			return False;
+			return False
 
-	def isCreateNamedConstructor(self):
+	def isCreateConstructor(self):
 		dictionary = ["insert", "define", "create", "add", "constructor", "named", "called"]
 		count = 0
 		for w in dictionary:
 			if w in self.response:
 				count+=1
-		if count >= 3:
-			return True;
-		else:
-			return False;
-	def isCreateUnamedConstructor(self):
-		dictionary = ["insert", "define", "create", "add", "constructor"]
-		count = 0
-		for w in dictionary:
-			if w in self.response:
-				count+=1
 		if count >= 2:
-			return True;
+			return True
 		else:
-			return False;
-	def isCreateNamedMethod(self):
+			return False
+	def isCreateMethod(self):
 		dictionary = ["insert", "define", "create", "add", "method", "function", "named", "called"]
 		count = 0
 		for w in dictionary:
 			if w in self.response:
 				count+=1
-		if count >= 3:
-			return True;
-		else:
-			return False;
-	def isCreatedUnamedMethod(self):
-		dictionary = ["insert", "define", "create", "add", "method", "function"]
-		count = 0
-		for w in dictionary:
-			if w in self.response:
-				count+=1
 		if count >= 2:
-			return True;
+			return True
 		else:
-			return False;
+			return False
 	def isCreateIfStatement(self):
 		dictionary = ["insert", "define", "create", "add", "if", "statement", "condition"]
 		count = 0
@@ -89,9 +65,9 @@ class ResponseProcessor():
 			if w in self.response:
 				count+=1
 		if count >= 2 and "if" in self.response:
-			return True;
+			return True
 		else:
-			return False;
+			return False
 	def isCreateWhileLoop(self):
 		dictionary = ["insert", "define", "create", "add", "while", "loop", "condition"]
 		count = 0
@@ -99,9 +75,9 @@ class ResponseProcessor():
 			if w in self.response:
 				count+=1
 		if count >= 2 and "while" in self.response:
-			return True;
+			return True
 		else:
-			return False;
+			return False
 	def isCreateForLoop(self):
 		dictionary = ["insert", "define", "create", "add", "for", "loop", "condition"]
 		count = 0
@@ -109,9 +85,9 @@ class ResponseProcessor():
 			if w in self.response:
 				count+=1
 		if count >= 2 and "for" in self.response:
-			return True;
+			return True
 		else:
-			return False;
+			return False
 	def isGoToNext(self):
 		dictionary = ["go", "next", "move", "to"]
 		count = 0
@@ -119,9 +95,9 @@ class ResponseProcessor():
 			if w in self.response:
 				count+=1
 		if count >= 1 and "next" in self.response or "move" in self.response:
-			return True;
+			return True
 		else:
-			return False;
+			return False
 
 	def isOpenUrl(self):
 		dictionary = ["search", "for", "google"]
@@ -129,7 +105,7 @@ class ResponseProcessor():
 		for w in dictionary:
 			if w in self.response:
 				count+=1
-		if count >= 1:
+		if count >= 1 and "search" in self.response:
 			return True
 		else:
 			return False

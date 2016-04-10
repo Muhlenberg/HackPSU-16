@@ -22,18 +22,25 @@ class SmartInsertCommand(sublime_plugin.TextCommand):
 
 
 	def getInsertStatement(self):
-		if (globVoiceCommand == "if-statement"):
+		if (globVoiceCommand == "class"):
+			statement = "public class " + self.formatFileName(self.view.file_name()) + " \n{\n\n}"
+		elif (globVoiceCommand == "constructor"):
+			statement = "public " + self.formatFileName(self.view.file_name()) + " \n{\n\n}"
+		elif (globVoiceCommand == "method"):
+			statement = "public <ReturnType> <defaultName>(<parameters>)\n{\n\n}"
+		elif (globVoiceCommand == "if-statement"):
 			statement = "\n\nif ()\n{\n\n}"
 		elif (globVoiceCommand == "while-loop"):
 			statement = "\n\nwhile ()\n{\n\n}"
-		elif (globVoiceCommand == "class"):
-			statement = "public class "+ self.formatFileName(self.view.file_name()) + " \n{\n\n}"
+		elif (globVoiceCommand == "for-loop"):
+			statement = "\n\nfor (int i=0;i<[length];i++)\n{\n\n}"
 		elif (globVoiceCommand == "open-url"):
 			arg = ''.join(map(str, response.split()[2:]))
 			self.openBrowser(arg)
 			statement = ""
 		else:
-			statement = "No matching voice command found"
+			statement = ""
+			print "No matching voice command found"
 		return statement
 
 	def insertStatement(self, edit, cursorPosition):
@@ -44,9 +51,10 @@ class SmartInsertCommand(sublime_plugin.TextCommand):
 		region = sublime.Region(cursorPosition, cursorPosition - statementLength)
 
 		#indent new statement
-		self.view.sel().clear()
-		self.view.sel().add(region)
-		self.view.run_command("reindent")
+		if statement != "":
+			self.view.sel().clear()
+			self.view.sel().add(region)
+			self.view.run_command("reindent")
 
 	def returnToOriginalCursorPosition(self, originalCursorPosition):
 		(row, col) = self.view.rowcol(originalCursorPosition)
