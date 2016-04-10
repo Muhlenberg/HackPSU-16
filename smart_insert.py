@@ -1,22 +1,10 @@
 import sublime, sublime_plugin
 from os.path import basename, splitext
 
-class VoiceToTextCommand(sublime_plugin.TextCommand):
+class SmartInsertCommand(sublime_plugin.TextCommand):
 	statement = ""
 	globVoiceCommand = ""
-
-	def run(self, edit, voiceCommand):
-		global globVoiceCommand
-		global statement
-
-		globVoiceCommand = voiceCommand
-		statement = self.getInsertStatement()
-		originalCursorPosition = self.view.sel()[0].end()
-		
-		self.insertStatement(edit, originalCursorPosition)
-		self.returnToOriginalCursorPosition(originalCursorPosition)
-
-
+	
 	def getInsertStatement(self):
 		if (globVoiceCommand == "if-statement"):
 			statement = "\n\nif ()\n{\n\n}"
@@ -50,3 +38,14 @@ class VoiceToTextCommand(sublime_plugin.TextCommand):
 	def formatFileName(self, fileName):
 		formattedFileName = basename(fileName)
 		return os.path.splitext(formattedFileName)[0]
+
+	def run(self, edit, voiceCommand):
+		global globVoiceCommand
+		global statement
+
+		globVoiceCommand = voiceCommand
+		statement = self.getInsertStatement()
+		originalCursorPosition = self.view.sel()[0].end()
+
+		self.insertStatement(edit, originalCursorPosition)
+		self.returnToOriginalCursorPosition(originalCursorPosition)
