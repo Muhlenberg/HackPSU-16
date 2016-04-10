@@ -1,4 +1,5 @@
-import sublime, sublime_plugin, os, subprocess, urllib, urllib2, time, json
+import sublime, sublime_plugin, os, subprocess, urllib, urllib2, time, json, threading
+from response_processor import ResponseProcessor
 
 GOOGLE_DEFAULT_KEY = "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw" #i think this is some random guys key... oh well
 GOOGLE_SPEECH_URL = "http://www.google.com/speech-api/v2/recognize?client=chromium&lang=en-us&key=" + GOOGLE_DEFAULT_KEY
@@ -47,7 +48,9 @@ class VoiceCommand(sublime_plugin.TextCommand):
 			raise
 
 		os.remove(filename) #remove flac file so we dont litter with files
-
+		processor = ResponseProcessor(res)
+		processedResponse = processor.processResponse()
+		self.view.run_command("smart_insert", {"voiceCommand" : processedResponse})
 		return res
 
 	def run(self, edit):

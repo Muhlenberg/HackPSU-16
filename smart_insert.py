@@ -1,7 +1,7 @@
 import sublime, sublime_plugin
 from os.path import basename, splitext
 
-class VoiceToTextCommand(sublime_plugin.TextCommand):
+class SmartInsertCommand(sublime_plugin.TextCommand):
 	statement = ""
 	globVoiceCommand = ""
 
