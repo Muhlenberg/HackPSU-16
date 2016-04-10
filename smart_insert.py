@@ -1,4 +1,4 @@
-import sublime, sublime_plugin
+import sublime, sublime_plugin, os
 from os.path import basename, splitext
 
 class SmartInsertCommand(sublime_plugin.TextCommand):
@@ -22,7 +22,7 @@ class SmartInsertCommand(sublime_plugin.TextCommand):
 			statement = "\n\nif ()\n{\n\n}"
 		elif (globVoiceCommand == "while-loop"):
 			statement = "\n\nwhile ()\n{\n\n}"
-		elif (globVoiceCommand == "public-constructor"):
+		elif (globVoiceCommand == "class"):
 			statement = "public class "+ self.formatFileName(self.view.file_name()) + " \n{\n\n}"
 		else:
 			statement = "No matching voice command found"

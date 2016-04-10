@@ -8,11 +8,10 @@ audio_filename='output.wav'
 
 class VoiceCommand(sublime_plugin.TextCommand):
 	def record(self, edit):
-		bashCommand="arecord -c 1 -r 44100 -N -d 5 output.wav"
+		bashCommand="arecord -c 1 -r 44100 -N -d 2 output.wav"
 		process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-		time.sleep(5)
+		time.sleep(2)
 
-		print "begin sending to google"
 		self.send_to_google()
 
 
@@ -21,7 +20,7 @@ class VoiceCommand(sublime_plugin.TextCommand):
 		os.system('flac -f ' + audio_filename)
 		filename = audio_filename.split('.')[0] + '.flac'
 
-		print "converted to flac"
+		print "converted wav to flac"
 
 		f = open(filename)
 		content = f.read()
@@ -30,6 +29,7 @@ class VoiceCommand(sublime_plugin.TextCommand):
 		headers = {"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.63 Safari/535.7", 
 		   'Content-type': 'audio/x-flac; rate=44100'}
 
+		print "sending request to google api"
 		request = urllib2.Request(GOOGLE_SPEECH_URL, data=content, headers=headers)
 		print("Sending audio to Google Speech API at url: " + GOOGLE_SPEECH_URL)
 
@@ -41,18 +41,19 @@ class VoiceCommand(sublime_plugin.TextCommand):
 			result = json.loads(response.split("\n")[1])
 			res = result['result'][0]['alternative'][0]['transcript']
 			print "parsed response: " + res
-
 		except:
 			print("error connecting to google speech api")
 			res = None
 			raise
 
 		os.remove(filename) #remove flac file so we dont litter with files
+		
+		print "begin processing response"
+
 		processor = ResponseProcessor(res)
 		processedResponse = processor.processResponse()
 		self.view.run_command("smart_insert", {"voiceCommand" : processedResponse})
-		return res
-
+		
 	def run(self, edit):
 		thread = threading.Thread(name='record', target=self.record, kwargs={'edit':edit})
 		thread.setDaemon(True)

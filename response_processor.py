@@ -40,7 +40,7 @@ class ResponseProcessor():
 		else:
 			return False;
 	def isCreateNamedConstructor(self):
-		dictionary = ["define", "create", "add", "constructor", "named", "called"]
+		dictionary = ["insert", "define", "create", "add", "constructor", "named", "called"]
 		count = 0
 		for w in dictionary:
 			if w in self.response:
@@ -50,7 +50,7 @@ class ResponseProcessor():
 		else:
 			return False;
 	def isCreateUnamedConstructor(self):
-		dictionary = ["define", "create", "add", "constructor"]
+		dictionary = ["insert", "define", "create", "add", "constructor"]
 		count = 0
 		for w in dictionary:
 			if w in self.response:
@@ -60,7 +60,7 @@ class ResponseProcessor():
 		else:
 			return False;
 	def isCreateNamedMethod(self):
-		dictionary = ["define", "create", "add", "method", "function", "named", "called"]
+		dictionary = ["insert", "define", "create", "add", "method", "function", "named", "called"]
 		count = 0
 		for w in dictionary:
 			if w in self.response:
@@ -70,7 +70,7 @@ class ResponseProcessor():
 		else:
 			return False;
 	def isCreatedUnamedMethod(self):
-		dictionary = ["define", "create", "add", "method", "function"]
+		dictionary = ["insert", "define", "create", "add", "method", "function"]
 		count = 0
 		for w in dictionary:
 			if w in self.response:
@@ -80,7 +80,7 @@ class ResponseProcessor():
 		else:
 			return False;
 	def isCreateIfStatement(self):
-		dictionary = ["define", "create", "add", "if", "statement", "condition"]
+		dictionary = ["insert", "define", "create", "add", "if", "statement", "condition"]
 		count = 0
 		for w in dictionary:
 			if w in self.response:
@@ -90,7 +90,7 @@ class ResponseProcessor():
 		else:
 			return False;
 	def isCreateWhileLoop(self):
-		dictionary = ["define", "create", "add", "while", "loop", "condition"]
+		dictionary = ["insert", "define", "create", "add", "while", "loop", "condition"]
 		count = 0
 		for w in dictionary:
 			if w in self.response:
@@ -100,7 +100,7 @@ class ResponseProcessor():
 		else:
 			return False;
 	def isCreateForLoop(self):
-		dictionary = ["define", "create", "add", "for", "loop", "condition"]
+		dictionary = ["insert", "define", "create", "add", "for", "loop", "condition"]
 		count = 0
 		for w in dictionary:
 			if w in self.response:
