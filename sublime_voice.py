@@ -1,29 +1,17 @@
-import sublime, sublime_plugin, sys, os, functools, pyaudio, urllib, urllib2, math
-import audioop, wave, json, threading, time
-from recorder import Recorder
-from collections import deque
+import sublime, sublime_plugin, os, subprocess, urllib, urllib2, time, json
 
 GOOGLE_DEFAULT_KEY = "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw" #i think this is some random guys key... oh well
 GOOGLE_SPEECH_URL = "http://www.google.com/speech-api/v2/recognize?client=chromium&lang=en-us&key=" + GOOGLE_DEFAULT_KEY
-
-CHUNK   = 1024				#bytes to record and recognize audio 'snippet'
-FORMAT = pyaudio.paInt16 	#audio stuff, dw about it
-CHANNELS = 1        		#audio channel
-RATE = 44100        		#audio bitrate, make sure to send the same bitrate to google
-THRESHOLD=2500      		#energy threshold before something is considered not silence
-RECORD_SECONDS=5    		#seconds to record (duh)
 
 audio_filename='output.wav'
 
 class VoiceCommand(sublime_plugin.TextCommand):
 	def record(self, edit):
-		print "started recording"
-		rec = Recorder(channels=1)
-		with rec.open(audio_filename, 'wb') as f:
-			f.start_recording()
-			time.sleep(5)
-			f.stop_recording()
+		bashCommand="arecord -c 1 -r 44100 -N -d 5 output.wav"
+		process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+		time.sleep(5)
 
+		print "begin sending to google"
 		self.send_to_google()
 
 
@@ -31,6 +19,8 @@ class VoiceCommand(sublime_plugin.TextCommand):
 		#convert to file to flac before sending to google
 		os.system('flac -f ' + audio_filename)
 		filename = audio_filename.split('.')[0] + '.flac'
+
+		print "converted to flac"
 
 		f = open(filename)
 		content = f.read()
@@ -54,6 +44,7 @@ class VoiceCommand(sublime_plugin.TextCommand):
 		except:
 			print("error connecting to google speech api")
 			res = None
+			raise
 
 		os.remove(filename) #remove flac file so we dont litter with files
 
