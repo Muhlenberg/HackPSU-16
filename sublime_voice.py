@@ -1,5 +1,6 @@
 import sublime, sublime_plugin, sys, os, functools, pyaudio, urllib, urllib2, math
-import audioop, wave, json, threading
+import audioop, wave, json, threading, time
+from recorder import Recorder
 from collections import deque
 
 GOOGLE_DEFAULT_KEY = "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw" #i think this is some random guys key... oh well
@@ -12,35 +13,21 @@ RATE = 44100        		#audio bitrate, make sure to send the same bitrate to goog
 THRESHOLD=2500      		#energy threshold before something is considered not silence
 RECORD_SECONDS=5    		#seconds to record (duh)
 
+audio_filename='output.wav'
+
 class VoiceCommand(sublime_plugin.TextCommand):
-
 	def record(self, edit):
-		audio = pyaudio.PyAudio()
-		 
-		# start Recording
-		stream = audio.open(format=FORMAT, channels=CHANNELS,
-						rate=RATE, input=True,
-						frames_per_buffer=CHUNK)
-		print "recording..."
-		frames = []
-		 
-		for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-			data = stream.read(CHUNK)
-			frames.append(data)
-		print "finished recording"
+		print "started recording"
+		rec = Recorder(channels=1)
+		with rec.open(audio_filename, 'wb') as f:
+			f.start_recording()
+			time.sleep(5)
+			f.stop_recording()
 
-		self.save_speech(audio, frames)
-		
-		 
-		# stop Recording
-		stream.stop_stream()
-		stream.close()
-		audio.terminate()
+		self.send_to_google()
 
-		text = self.send_to_google('output')
-		print text
 
-	def send_to_google(self, audio_filename):
+	def send_to_google(self):
 		#convert to file to flac before sending to google
 		os.system('flac -f ' + audio_filename)
 		filename = audio_filename.split('.')[0] + '.flac'
@@ -72,14 +59,8 @@ class VoiceCommand(sublime_plugin.TextCommand):
 
 		return res
 
-
-	def save_speech(self, audio, frames):
-		waveFile = wave.open('output', 'wb')
-		waveFile.setnchannels(CHANNELS)
-		waveFile.setsampwidth(audio.get_sample_size(FORMAT))
-		waveFile.setframerate(RATE)
-		waveFile.writeframes(b''.join(frames))
-		waveFile.close()
-
 	def run(self, edit):
-		self.record(edit)
+		thread = threading.Thread(name='record', target=self.record, kwargs={'edit':edit})
+		thread.setDaemon(True)
+		thread.start()
+		print "daemon started"
