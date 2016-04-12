@@ -23,17 +23,17 @@ class SmartInsertCommand(sublime_plugin.TextCommand):
 
 	def getInsertStatement(self):
 		if (globVoiceCommand == "class"):
-			statement = "public class " + self.formatFileName(self.view.file_name()) + " \n{\n\n}"
+			statement = "public class " + self.formatFileName(self.view.file_name()) + " \n{\n\n}\n"
 		elif (globVoiceCommand == "constructor"):
-			statement = "public " + self.formatFileName(self.view.file_name()) + " \n{\n\n}"
+			statement = "public " + self.formatFileName(self.view.file_name()) + "()\n{\n\n}\n"
 		elif (globVoiceCommand == "method"):
-			statement = "public <ReturnType> <defaultName>(<parameters>)\n{\n\n}"
+			statement = "public <ReturnType> <defaultName>(<parameters>)\n{\n\n}\n"
 		elif (globVoiceCommand == "if-statement"):
-			statement = "\n\nif ()\n{\n\n}"
+			statement = "\n\nif ()\n{\n\n}\n"
 		elif (globVoiceCommand == "while-loop"):
-			statement = "\n\nwhile ()\n{\n\n}"
+			statement = "\n\nwhile ()\n{\n\n}\n"
 		elif (globVoiceCommand == "for-loop"):
-			statement = "\n\nfor (int i=0;i<[length];i++)\n{\n\n}"
+			statement = "\n\nfor (int i=0;i<[length];i++)\n{\n\n}\n"
 		elif (globVoiceCommand == "open-url"):
 			arg = ''.join(map(str, response.split()[2:]))
 			self.openBrowser(arg)
