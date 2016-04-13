@@ -1,0 +1,9 @@
+[
+	{"keys":["ctrl+shift+v"], "command": "voice"},
+	{"keys":["ctrl+shift+i"], "command": "smart_insert", "args": {"voiceCommand" : "if-statement", "rresponse": "none"}},
+	{"keys":["ctrl+shift+w"], "command": "smart_insert", "args": {"voiceCommand" : "while-loop", "rresponse": "none"}},
+	{"keys":["ctrl+shift+m"], "command": "smart_insert", "args": {"voiceCommand" : "method", "rresponse": "none"}},
+	{"keys":["ctrl+shift+c"], "command": "smart_insert", "args": {"voiceCommand" : "class", "rresponse": "none"}},
+	{"keys":["ctrl+shift+f"], "command": "smart_insert", "args": {"voiceCommand" : "for-loop", "rresponse": "none"}},
+	{"keys":["ctrl+shift+o"], "command": "smart_insert", "args": {"voiceCommand" : "constructor", "rresponse": "none"}}
+]
